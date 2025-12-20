@@ -1,36 +1,43 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.ResourceAllocation;
+import com.example.demo.entity.AllocationRule;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.ResourceAllocationRepository;
-import com.example.demo.service.ResourceAllocationService;
+import com.example.demo.repository.AllocationRuleRepository;
+import com.example.demo.service.AllocationRuleService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ResourceAllocationServiceImpl implements ResourceAllocationService {
+public class AllocationRuleServiceImpl implements AllocationRuleService {
 
-    private final ResourceAllocationRepository repo;
+    private final AllocationRuleRepository repo;
 
-    public ResourceAllocationServiceImpl(ResourceAllocationRepository repo) {
+    public AllocationRuleServiceImpl(AllocationRuleRepository repo) {
         this.repo = repo;
     }
 
-    public ResourceAllocation createAllocation(ResourceAllocation allocation) {
-        return repo.save(allocation);
+    public AllocationRule createRule(AllocationRule rule) {
+        return repo.save(rule);
     }
 
-    public ResourceAllocation getAllocationById(Long id) {
+    public AllocationRule getRuleById(Long id) {
         return repo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Allocation not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Rule not found"));
     }
 
-    public List<ResourceAllocation> getAllAllocations() {
+    public List<AllocationRule> getAllRules() {
         return repo.findAll();
     }
 
-    public void deleteAllocation(Long id) {
+    public AllocationRule updateRule(Long id, AllocationRule rule) {
+        AllocationRule existing = getRuleById(id);
+        existing.setRuleName(rule.getRuleName());
+        existing.setRuleDescription(rule.getRuleDescription());
+        return repo.save(existing);
+    }
+
+    public void deleteRule(Long id) {
         repo.deleteById(id);
     }
 }
