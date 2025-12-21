@@ -40,4 +40,4 @@ public class UserController {
         return "User deleted";
     }
 }
-ls -l src/main/java/com/example/demo/controller | cat -A
+
