@@ -43,12 +43,12 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                        "/",                       // root
-                        "/error",                  // error page
-                        "/hello",                  // servlet
-                        "/api/auth/**",            // auth endpoints
-                        "/v3/api-docs/**",         // swagger docs
-                        "/swagger-ui/**",          // swagger UI
+                        "/",                       
+                        "/error",                 
+                        "/hello",                  
+                        "/api/auth/**",            
+                        "/v3/api-docs/**",         
+                        "/swagger-ui/**",          
                         "/swagger-ui.html"
                 ).permitAll()
                 .anyRequest().authenticated()
