@@ -1,8 +1,3 @@
-package com.example.demo.entity;
-
-import jakarta.persistence.*;
-import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "resource_requests")
 public class ResourceRequest {
@@ -14,34 +9,26 @@ public class ResourceRequest {
     private String resourceType;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
     private User requestedBy;
 
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-
     private String purpose;
-
     private String status;
 
     public ResourceRequest() {}
 
-    public ResourceRequest(String resourceType, User requestedBy,
-                           LocalDateTime startTime, LocalDateTime endTime,
-                           String purpose) {
-        this.resourceType = resourceType;
-        this.requestedBy = requestedBy;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.purpose = purpose;
-    }
+    public Long getId() { return id; }
 
-    @PrePersist
-    public void onCreate() {
-        if (this.status == null) {
-            this.status = "PENDING";
-        }
-    }
+    public LocalDateTime getStartTime() { return startTime; }
+    public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }
 
-    // getters and setters
+    public LocalDateTime getEndTime() { return endTime; }
+    public void setEndTime(LocalDateTime endTime) { this.endTime = endTime; }
+
+    public User getRequestedBy() { return requestedBy; }
+    public void setRequestedBy(User requestedBy) { this.requestedBy = requestedBy; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }
