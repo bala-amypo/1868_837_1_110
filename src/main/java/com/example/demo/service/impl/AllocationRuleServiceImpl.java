@@ -23,13 +23,8 @@ public class AllocationRuleServiceImpl implements AllocationRuleService {
 
     @Override
     public AllocationRule update(Long id, AllocationRule rule) {
-        AllocationRule existing = repository.findById(id).orElseThrow();
-
-        existing.setRuleName(rule.getRuleName());
-        existing.setRuleType(rule.getRuleType());
-        existing.setPriorityWeight(rule.getPriorityWeight());
-
-        return repository.save(existing);
+        rule.setId(id);   // overwrite ID
+        return repository.save(rule);
     }
 
     @Override

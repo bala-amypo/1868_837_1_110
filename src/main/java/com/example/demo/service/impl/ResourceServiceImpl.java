@@ -23,14 +23,8 @@ public class ResourceServiceImpl implements ResourceService {
 
     @Override
     public Resource update(Long id, Resource resource) {
-        Resource existing = repository.findById(id).orElseThrow();
-
-        existing.setResourceName(resource.getResourceName());
-        existing.setResourceType(resource.getResourceType());
-        existing.setCapacity(resource.getCapacity());
-        existing.setLocation(resource.getLocation());
-
-        return repository.save(existing);
+        resource.setId(id);   // overwrite ID
+        return repository.save(resource);
     }
 
     @Override
