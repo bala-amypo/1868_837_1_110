@@ -5,13 +5,13 @@ import java.util.List;
 
 public interface ResourceService {
 
-    Resource createResource(Resource resource);
+    Resource create(Resource resource);
 
-    Resource getResourceById(Long id);
+    Resource update(Long id, Resource resource);
 
-    List<Resource> getAllResources();
+    Resource getById(Long id);
 
-    Resource updateResource(Long id, Resource resource);
+    List<Resource> getAll();
 
-    void deleteResource(Long id);
+    void delete(Long id);
 }

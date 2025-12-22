@@ -1,7 +1,6 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.AllocationRule;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.AllocationRuleRepository;
 import com.example.demo.service.AllocationRuleService;
 import org.springframework.stereotype.Service;
@@ -11,33 +10,40 @@ import java.util.List;
 @Service
 public class AllocationRuleServiceImpl implements AllocationRuleService {
 
-    private final AllocationRuleRepository repo;
+    private final AllocationRuleRepository repository;
 
-    public AllocationRuleServiceImpl(AllocationRuleRepository repo) {
-        this.repo = repo;
+    public AllocationRuleServiceImpl(AllocationRuleRepository repository) {
+        this.repository = repository;
     }
 
-    public AllocationRule createRule(AllocationRule rule) {
-        return repo.save(rule);
+    @Override
+    public AllocationRule create(AllocationRule rule) {
+        return repository.save(rule);
     }
 
-    public AllocationRule getRuleById(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Rule not found"));
-    }
+    @Override
+    public AllocationRule update(Long id, AllocationRule rule) {
+        AllocationRule existing = repository.findById(id).orElseThrow();
 
-    public List<AllocationRule> getAllRules() {
-        return repo.findAll();
-    }
-
-    public AllocationRule updateRule(Long id, AllocationRule rule) {
-        AllocationRule existing = getRuleById(id);
         existing.setRuleName(rule.getRuleName());
-        existing.setRuleDescription(rule.getRuleDescription());
-        return repo.save(existing);
+        existing.setRuleType(rule.getRuleType());
+        existing.setPriorityWeight(rule.getPriorityWeight());
+
+        return repository.save(existing);
     }
 
-    public void deleteRule(Long id) {
-        repo.deleteById(id);
+    @Override
+    public AllocationRule getById(Long id) {
+        return repository.findById(id).orElseThrow();
+    }
+
+    @Override
+    public List<AllocationRule> getAll() {
+        return repository.findAll();
+    }
+
+    @Override
+    public void delete(Long id) {
+        repository.deleteById(id);
     }
 }

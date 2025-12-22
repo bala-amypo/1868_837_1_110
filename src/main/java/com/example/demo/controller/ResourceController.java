@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Resource;
-import com.example.demo.repository.ResourceRepository;
+import com.example.demo.service.ResourceService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,39 +10,34 @@ import java.util.List;
 @RequestMapping("/api/resources")
 public class ResourceController {
 
-    private final ResourceRepository repo;
+    private final ResourceService service;
 
-    public ResourceController(ResourceRepository repo) {
-        this.repo = repo;
+    public ResourceController(ResourceService service) {
+        this.service = service;
     }
 
     @PostMapping
     public Resource create(@RequestBody Resource resource) {
-        return repo.save(resource);
-    }
-
-    @GetMapping
-    public List<Resource> getAll() {
-        return repo.findAll();
-    }
-
-    @GetMapping("/{id}")
-    public Resource getById(@PathVariable Long id) {
-        return repo.findById(id).orElseThrow();
+        return service.create(resource);
     }
 
     @PutMapping("/{id}")
     public Resource update(@PathVariable Long id, @RequestBody Resource resource) {
-        Resource existing = repo.findById(id).orElseThrow();
-        existing.setResourceName(resource.getResourceName());
-        existing.setResourceType(resource.getResourceType());
-        existing.setQuantity(resource.getQuantity());
-        return repo.save(existing);
+        return service.update(id, resource);
+    }
+
+    @GetMapping("/{id}")
+    public Resource getById(@PathVariable Long id) {
+        return service.getById(id);
+    }
+
+    @GetMapping
+    public List<Resource> getAll() {
+        return service.getAll();
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id) {
-        repo.deleteById(id);
-        return "Resource deleted";
+    public void delete(@PathVariable Long id) {
+        service.delete(id);
     }
 }
