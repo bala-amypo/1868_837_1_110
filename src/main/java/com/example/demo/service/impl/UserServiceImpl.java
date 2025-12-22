@@ -1,36 +1,32 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.User;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    @Override
-    public User registerUser(User user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new IllegalArgumentException("Email already exists");
-        }
+    public User save(User user) {
         return userRepository.save(user);
     }
 
-    @Override
-    public User getUser(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    public List<User> getAll() {
+        return userRepository.findAll();
     }
 
-    @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public User getById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+    public void delete(Long id) {
+        userRepository.deleteById(id);
     }
 }
