@@ -5,13 +5,13 @@ import java.util.List;
 
 public interface AllocationRuleService {
 
-    AllocationRule createRule(AllocationRule rule);
+    AllocationRule create(AllocationRule rule);
 
-    AllocationRule getRuleById(Long id);
+    AllocationRule update(Long id, AllocationRule rule);
 
-    List<AllocationRule> getAllRules();
+    AllocationRule getById(Long id);
 
-    AllocationRule updateRule(Long id, AllocationRule rule);
+    List<AllocationRule> getAll();
 
-    void deleteRule(Long id);
+    void delete(Long id);
 }

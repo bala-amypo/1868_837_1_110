@@ -1,26 +1,43 @@
-package com.example.demo.entity;
+package com.example.demo.controller;
 
-import jakarta.persistence.*;
+import com.example.demo.entity.AllocationRule;
+import com.example.demo.service.AllocationRuleService;
+import org.springframework.web.bind.annotation.*;
 
-@Entity
-@Table(name = "allocation_rules")
-public class AllocationRule {
+import java.util.List;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+@RestController
+@RequestMapping("/api/rules")
+public class AllocationRuleController {
 
-    private String ruleName;
-    private String ruleType;
-    private Integer priorityWeight;
+    private final AllocationRuleService service;
 
-    public AllocationRule() {}
-
-    public AllocationRule(String ruleName, String ruleType, Integer priorityWeight) {
-        this.ruleName = ruleName;
-        this.ruleType = ruleType;
-        this.priorityWeight = priorityWeight;
+    public AllocationRuleController(AllocationRuleService service) {
+        this.service = service;
     }
 
-    // getters & setters
+    @PostMapping
+    public AllocationRule create(@RequestBody AllocationRule rule) {
+        return service.create(rule);
+    }
+
+    @PutMapping("/{id}")
+    public AllocationRule update(@PathVariable Long id, @RequestBody AllocationRule rule) {
+        return service.update(id, rule);
+    }
+
+    @GetMapping("/{id}")
+    public AllocationRule getById(@PathVariable Long id) {
+        return service.getById(id);
+    }
+
+    @GetMapping
+    public List<AllocationRule> getAll() {
+        return service.getAll();
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        service.delete(id);
+    }
 }
