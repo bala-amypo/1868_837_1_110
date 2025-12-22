@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "resources")
 public class Resource {
 
     @Id
@@ -11,17 +12,17 @@ public class Resource {
 
     private String resourceName;
     private String resourceType;
-    private int quantity;
+    private Integer capacity;
+    private String location;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Resource() {}
 
-    public String getResourceName() { return resourceName; }
-    public void setResourceName(String resourceName) { this.resourceName = resourceName; }
+    public Resource(String resourceName, String resourceType, Integer capacity, String location) {
+        this.resourceName = resourceName;
+        this.resourceType = resourceType;
+        this.capacity = capacity;
+        this.location = location;
+    }
 
-    public String getResourceType() { return resourceType; }
-    public void setResourceType(String resourceType) { this.resourceType = resourceType; }
-
-    public int getQuantity() { return quantity; }
-    public void setQuantity(int quantity) { this.quantity = quantity; }
+    // getters & setters
 }

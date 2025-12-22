@@ -1,48 +1,26 @@
-package com.example.demo.controller;
+package com.example.demo.entity;
 
-import com.example.demo.entity.AllocationRule;
-import com.example.demo.repository.AllocationRuleRepository;
-import org.springframework.web.bind.annotation.*;
+import jakarta.persistence.*;
 
-import java.util.List;
+@Entity
+@Table(name = "allocation_rules")
+public class AllocationRule {
 
-@RestController
-@RequestMapping("/api/rules")
-public class AllocationRuleController {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private final AllocationRuleRepository repo;
+    private String ruleName;
+    private String ruleType;
+    private Integer priorityWeight;
 
-    public AllocationRuleController(AllocationRuleRepository repo) {
-        this.repo = repo;
+    public AllocationRule() {}
+
+    public AllocationRule(String ruleName, String ruleType, Integer priorityWeight) {
+        this.ruleName = ruleName;
+        this.ruleType = ruleType;
+        this.priorityWeight = priorityWeight;
     }
 
-    @PostMapping
-    public AllocationRule create(@RequestBody AllocationRule rule) {
-        return repo.save(rule);
-    }
-
-    @GetMapping
-    public List<AllocationRule> getAll() {
-        return repo.findAll();
-    }
-
-    @GetMapping("/{id}")
-    public AllocationRule getById(@PathVariable Long id) {
-        return repo.findById(id).orElseThrow();
-    }
-
-    @PutMapping("/{id}")
-    public AllocationRule update(@PathVariable Long id,
-                                 @RequestBody AllocationRule rule) {
-        AllocationRule existing = repo.findById(id).orElseThrow();
-        existing.setRuleName(rule.getRuleName());
-        existing.setRuleDescription(rule.getRuleDescription());
-        return repo.save(existing);
-    }
-
-    @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id) {
-        repo.deleteById(id);
-        return "Rule deleted";
-    }
+    // getters & setters
 }
