@@ -23,7 +23,7 @@
 
 //     public ResourceRequest getRequestById(Long id) {
 //         return repo.findById(id)
-//                 .orElseThrow(() -> new ResourceNotFoundException("Request not found"));
+//                 .orElseThrow((-> new ResourceNotFoundException("Request not found"));
 //     }
 
 //     public List<ResourceRequest> getAllRequests() {
@@ -32,5 +32,4 @@
 
 //     public void deleteRequest(Long id) {
 //         repo.deleteById(id);
-//     }
-// }
+//     } }

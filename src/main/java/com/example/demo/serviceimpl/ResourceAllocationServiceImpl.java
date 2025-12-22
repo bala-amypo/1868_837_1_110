@@ -23,7 +23,7 @@
 
 //     public ResourceAllocation getAllocationById(Long id) {
 //         return repo.findById(id)
-//                 .orElseThrow(() -> new ResourceNotFoundException("Allocation not found"));
+//                 .orElseThrow(( -> new ResourceNotFoundException("Allocation not found"));
 //     }
 
 //     public List<ResourceAllocation> getAllAllocations() {
