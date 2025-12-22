@@ -1,39 +1,36 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.Resource;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.ResourceRepository;
 import com.example.demo.service.ResourceService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
+@RequiredArgsConstructor
 public class ResourceServiceImpl implements ResourceService {
 
     private final ResourceRepository resourceRepository;
 
-    public ResourceServiceImpl(ResourceRepository resourceRepository) {
-        this.resourceRepository = resourceRepository;
-    }
-
     @Override
-    public Resource createResource(Resource resource) {
-        if (resourceRepository.existsByResourceName(resource.getResourceName())) {
-            throw new IllegalArgumentException("Resource already exists");
-        }
-        if (resource.getCapacity() == null || resource.getCapacity() < 1) {
-            throw new IllegalArgumentException("Invalid capacity");
-        }
+    public Resource save(Resource resource) {
         return resourceRepository.save(resource);
     }
 
     @Override
-    public Resource getResource(Long id) {
-        return resourceRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Resource not found"));
+    public List<Resource> getAll() {
+        return resourceRepository.findAll();
     }
 
     @Override
-    public List<Resource> getAllResources() {
-        return resourceRepository.findAll();
+    public Resource getById(Long id) {
+        return resourceRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public void delete(Long id) {
+        resourceRepository.deleteById(id);
     }
 }
