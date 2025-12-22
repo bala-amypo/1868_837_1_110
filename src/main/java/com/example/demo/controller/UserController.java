@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.User;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,33 +10,24 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
 
-    private final UserRepository repo;
+    private final UserService service;
 
-    public UserController(UserRepository repo) {
-        this.repo = repo;
+    public UserController(UserService service) {
+        this.service = service;
+    }
+
+    @PostMapping
+    public User create(@RequestBody User user) {
+        return service.create(user);
     }
 
     @GetMapping
-    public List<User> getAllUsers() {
-        return repo.findAll();
+    public List<User> getAll() {
+        return service.getAll();
     }
 
     @GetMapping("/{id}")
-    public User getUser(@PathVariable Long id) {
-        return repo.findById(id).orElseThrow();
-    }
-
-    @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User user) {
-        User existing = repo.findById(id).orElseThrow();
-        existing.setName(user.getName());
-        existing.setRole(user.getRole());
-        return repo.save(existing);
-    }
-
-    @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable Long id) {
-        repo.deleteById(id);
-        return "User deleted";
+    public User get(@PathVariable Long id) {
+        return service.getById(id);
     }
 }

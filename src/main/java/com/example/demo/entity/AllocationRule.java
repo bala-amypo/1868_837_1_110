@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "allocation_rules")
 public class AllocationRule {
 
     @Id
@@ -10,14 +11,16 @@ public class AllocationRule {
     private Long id;
 
     private String ruleName;
-    private String ruleDescription;
+    private String ruleType;
+    private Integer priorityWeight;
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public AllocationRule() {}
 
-    public String getRuleName() { return ruleName; }
-    public void setRuleName(String ruleName) { this.ruleName = ruleName; }
+    public AllocationRule(String ruleName, String ruleType, Integer priorityWeight) {
+        this.ruleName = ruleName;
+        this.ruleType = ruleType;
+        this.priorityWeight = priorityWeight;
+    }
 
-    public String getRuleDescription() { return ruleDescription; }
-    public void setRuleDescription(String ruleDescription) { this.ruleDescription = ruleDescription; }
+    // getters & setters
 }
