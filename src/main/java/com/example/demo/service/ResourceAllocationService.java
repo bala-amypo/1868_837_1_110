@@ -1,15 +1,15 @@
-package com.example.demo.service;
+// package com.example.demo.service;
 
-import com.example.demo.entity.ResourceAllocation;
-import java.util.List;
+// import com.example.demo.entity.ResourceAllocation;
+// import java.util.List;
 
-public interface ResourceAllocationService {
+// public interface ResourceAllocationService {
 
-    ResourceAllocation createAllocation(ResourceAllocation allocation);
+//     ResourceAllocation createAllocation(ResourceAllocation allocation);
 
-    ResourceAllocation getAllocationById(Long id);
+//     ResourceAllocation getAllocationById(Long id);
 
-    List<ResourceAllocation> getAllAllocations();
+//     List<ResourceAllocation> getAllAllocations();
 
-    void deleteAllocation(Long id);
-}
+//     void deleteAllocation(Long id);
+// }
