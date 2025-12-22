@@ -2,43 +2,37 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.ResourceRequest;
 import com.example.demo.service.ResourceRequestService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/requests")
+@RequestMapping("/resource-requests")
+@RequiredArgsConstructor
 public class ResourceRequestController {
 
     private final ResourceRequestService requestService;
 
-    public ResourceRequestController(ResourceRequestService requestService) {
-        this.requestService = requestService;
+    @PostMapping
+    public ResponseEntity<ResourceRequest> create(@RequestBody ResourceRequest request) {
+        return ResponseEntity.ok(requestService.save(request));
     }
 
-    @PostMapping("/{userId}")
-    public ResourceRequest createRequest(
-            @PathVariable Long userId,
-            @RequestBody ResourceRequest request
-    ) {
-        return requestService.createRequest(userId, request);
+    @GetMapping
+    public ResponseEntity<List<ResourceRequest>> getAll() {
+        return ResponseEntity.ok(requestService.getAll());
     }
 
     @GetMapping("/{id}")
-    public ResourceRequest getRequest(@PathVariable Long id) {
-        return requestService.getRequest(id);
+    public ResponseEntity<ResourceRequest> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(requestService.getById(id));
     }
 
-    @GetMapping("/user/{userId}")
-    public List<ResourceRequest> getRequestsByUser(@PathVariable Long userId) {
-        return requestService.getRequestsByUser(userId);
-    }
-
-    @PutMapping("/status/{requestId}")
-    public ResourceRequest updateStatus(
-            @PathVariable Long requestId,
-            @RequestParam String status
-    ) {
-        return requestService.updateRequestStatus(requestId, status);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        requestService.delete(id);
+        return ResponseEntity.ok("Deleted successfully");
     }
 }
