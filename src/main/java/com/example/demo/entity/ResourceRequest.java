@@ -24,6 +24,9 @@ public class ResourceRequest {
 
     // getters & setters
     public Long getId() { return id; }
+    public void setId(Long id) {
+    this.id = id;
+}
     public String getResourceType() { return resourceType; }
     public void setResourceType(String resourceType) { this.resourceType = resourceType; }
     public String getPurpose() { return purpose; }
