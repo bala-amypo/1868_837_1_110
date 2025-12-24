@@ -2,40 +2,31 @@ package com.example.demo.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-
-import java.security.Key;
 import java.util.Date;
 
 public class JwtUtil {
 
-    private final Key key;
-    private final long validityInMs;
+    private final String secret;
+    private final long validity;
 
-    public JwtUtil(String secretKey, long validityInMs) {
-        this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
-        this.validityInMs = validityInMs;
+    public JwtUtil(String secret, long validity) {
+        this.secret = secret;
+        this.validity = validity;
     }
 
-    public String generateToken(Long userId, String email, String role) {
-
-        Claims claims = Jwts.claims().setSubject(email);
-        claims.put("userId", userId);
-        claims.put("role", role);
-
-        Date now = new Date();
-        Date expiry = new Date(now.getTime() + validityInMs);
-
+    public String generateToken(Long id, String email, String role) {
         return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(expiry)
-                .signWith(key, SignatureAlgorithm.HS256)
+                .setSubject(email)
+                .claim("userId", id)
+                .claim("role", role)
+                .setExpiration(new Date(System.currentTimeMillis() + validity))
+                .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
                 .compact();
     }
 
     public Claims parseClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(key)
+                .setSigningKey(secret.getBytes())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();

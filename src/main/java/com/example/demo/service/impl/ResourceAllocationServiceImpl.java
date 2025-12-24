@@ -1,58 +1,34 @@
-package com.example.demo.service.impl;
-
-import com.example.demo.entity.Resource;
-import com.example.demo.entity.ResourceAllocation;
-import com.example.demo.entity.ResourceRequest;
-import com.example.demo.repository.ResourceAllocationRepository;
-import com.example.demo.repository.ResourceRepository;
-import com.example.demo.repository.ResourceRequestRepository;
-import com.example.demo.service.ResourceAllocationService;
-
-import java.util.List;
-
+@Service
 public class ResourceAllocationServiceImpl implements ResourceAllocationService {
 
-    private final ResourceRequestRepository requestRepository;
-    private final ResourceRepository resourceRepository;
-    private final ResourceAllocationRepository allocationRepository;
+    private final ResourceRequestRepository reqRepo;
+    private final ResourceRepository resRepo;
+    private final ResourceAllocationRepository allocRepo;
 
-    public ResourceAllocationServiceImpl(ResourceRequestRepository requestRepository,
-                                         ResourceRepository resourceRepository,
-                                         ResourceAllocationRepository allocationRepository) {
-        this.requestRepository = requestRepository;
-        this.resourceRepository = resourceRepository;
-        this.allocationRepository = allocationRepository;
+    public ResourceAllocationServiceImpl(ResourceRequestRepository r,
+                                         ResourceRepository res,
+                                         ResourceAllocationRepository a) {
+        this.reqRepo = r;
+        this.resRepo = res;
+        this.allocRepo = a;
     }
 
-    @Override
     public ResourceAllocation autoAllocate(Long requestId) {
 
-        ResourceRequest request = requestRepository.findById(requestId)
+        ResourceRequest req = reqRepo.findById(requestId)
                 .orElseThrow(() -> new RuntimeException("Request not found"));
 
-        List<Resource> resources =
-                resourceRepository.findByResourceType(request.getResourceType());
+        List<Resource> list = resRepo.findByResourceType(req.getResourceType());
+        if (list.isEmpty())
+            throw new RuntimeException("No resources");
 
-        if (resources.isEmpty()) {
-            throw new RuntimeException("No resource available");
-        }
-
-        ResourceAllocation allocation = new ResourceAllocation();
-        allocation.setResource(resources.get(0));
-        allocation.setRequest(request);
-        allocation.setConflictFlag(false);
-
-        return allocationRepository.save(allocation);
+        ResourceAllocation alloc = new ResourceAllocation();
+        alloc.setRequest(req);
+        alloc.setResource(list.get(0));
+        return allocRepo.save(alloc);
     }
 
-    @Override
-    public ResourceAllocation getAllocation(Long id) {
-        return allocationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Allocation not found"));
-    }
-
-    @Override
     public List<ResourceAllocation> getAllAllocations() {
-        return allocationRepository.findAll();
+        return allocRepo.findAll();
     }
 }

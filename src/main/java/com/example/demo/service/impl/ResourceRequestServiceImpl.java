@@ -1,62 +1,34 @@
-package com.example.demo.service.impl;
-
-import com.example.demo.entity.ResourceRequest;
-import com.example.demo.entity.User;
-import com.example.demo.repository.ResourceRequestRepository;
-import com.example.demo.repository.UserRepository;
-import com.example.demo.service.ResourceRequestService;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
+@Service
 public class ResourceRequestServiceImpl implements ResourceRequestService {
 
-    private final ResourceRequestRepository requestRepository;
-    private final UserRepository userRepository;
+    private final ResourceRequestRepository reqRepo;
+    private final UserRepository userRepo;
 
-    public ResourceRequestServiceImpl(ResourceRequestRepository requestRepository,
-                                      UserRepository userRepository) {
-        this.requestRepository = requestRepository;
-        this.userRepository = userRepository;
+    public ResourceRequestServiceImpl(ResourceRequestRepository r, UserRepository u) {
+        this.reqRepo = r;
+        this.userRepo = u;
     }
 
-    @Override
-    public ResourceRequest createRequest(Long userId, ResourceRequest request) {
-
-        User user = userRepository.findById(userId)
+    public ResourceRequest createRequest(Long userId, ResourceRequest req) {
+        User u = userRepo.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (request.getStartTime() == null || request.getEndTime() == null) {
+        if (req.getStartTime().isAfter(req.getEndTime()))
             throw new IllegalArgumentException("Invalid time");
-        }
 
-        if (!request.getStartTime().isBefore(request.getEndTime())) {
-            throw new IllegalArgumentException("Invalid time range");
-        }
-
-        request.setRequestedBy(user);
-        request.setStatus("PENDING");
-
-        return requestRepository.save(request);
+        req.setRequestedBy(u);
+        req.setStatus("PENDING");
+        return reqRepo.save(req);
     }
 
-    @Override
-    public List<ResourceRequest> getRequestsByUser(Long userId) {
-        return requestRepository.findByRequestedBy_Id(userId);
+    public List<ResourceRequest> getRequestsByUser(Long id) {
+        return reqRepo.findByRequestedBy_Id(id);
     }
 
-    @Override
-    public ResourceRequest getRequest(Long id) {
-        return requestRepository.findById(id)
+    public ResourceRequest updateRequestStatus(Long id, String status) {
+        ResourceRequest r = reqRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Request not found"));
-    }
-
-    @Override
-    public ResourceRequest updateRequestStatus(Long requestId, String status) {
-        ResourceRequest request = requestRepository.findById(requestId)
-                .orElseThrow(() -> new RuntimeException("Request not found"));
-
-        request.setStatus(status);
-        return requestRepository.save(request);
+        r.setStatus(status);
+        return reqRepo.save(r);
     }
 }
