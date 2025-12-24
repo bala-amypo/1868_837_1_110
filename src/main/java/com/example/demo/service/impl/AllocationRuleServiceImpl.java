@@ -3,24 +3,35 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.AllocationRule;
 import com.example.demo.repository.AllocationRuleRepository;
 import com.example.demo.service.AllocationRuleService;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public class AllocationRuleServiceImpl implements AllocationRuleService {
 
-    private final AllocationRuleRepository repo;
+    private final AllocationRuleRepository ruleRepository;
 
-    public AllocationRuleServiceImpl(AllocationRuleRepository repo) {
-        this.repo = repo;
+    public AllocationRuleServiceImpl(AllocationRuleRepository ruleRepository) {
+        this.ruleRepository = ruleRepository;
     }
 
-    public AllocationRule save(AllocationRule rule) {
-        return repo.save(rule);
+    @Override
+    public AllocationRule createRule(AllocationRule rule) {
+
+        if (ruleRepository.existsByRuleName(rule.getRuleName())) {
+            throw new IllegalArgumentException("Rule already exists");
+        }
+
+        return ruleRepository.save(rule);
     }
 
-    public List<AllocationRule> getAll() {
-        return repo.findAll();
+    @Override
+    public AllocationRule getRule(Long id) {
+        return ruleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Rule not found"));
+    }
+
+    @Override
+    public List<AllocationRule> getAllRules() {
+        return ruleRepository.findAll();
     }
 }

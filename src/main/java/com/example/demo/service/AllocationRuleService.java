@@ -4,6 +4,10 @@ import com.example.demo.entity.AllocationRule;
 import java.util.List;
 
 public interface AllocationRuleService {
-    AllocationRule save(AllocationRule rule);
-    List<AllocationRule> getAll();
+
+    AllocationRule createRule(AllocationRule rule);
+
+    AllocationRule getRule(Long id);
+
+    List<AllocationRule> getAllRules();
 }

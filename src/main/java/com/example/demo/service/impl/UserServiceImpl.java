@@ -3,24 +3,42 @@ package com.example.demo.service.impl;
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
-import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 
-@Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository repo;
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    public UserServiceImpl(UserRepository repo) {
-        this.repo = repo;
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    public User save(User user) {
-        return repo.save(user);
+    @Override
+    public User registerUser(User user) {
+
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("User already exists");
+        }
+
+        if (user.getRole() == null) {
+            user.setRole("USER");
+        }
+
+        user.setPassword(encoder.encode(user.getPassword()));
+        return userRepository.save(user);
     }
 
-    public List<User> getAll() {
-        return repo.findAll();
+    @Override
+    public User getUser(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }
