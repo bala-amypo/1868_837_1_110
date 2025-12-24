@@ -10,19 +10,19 @@ import java.util.List;
 @RequestMapping("/api/allocations")
 public class ResourceAllocationController {
 
-    private final ResourceAllocationService service;
+    private final ResourceAllocationService allocationService;
 
-    public ResourceAllocationController(ResourceAllocationService service) {
-        this.service = service;
+    public ResourceAllocationController(ResourceAllocationService allocationService) {
+        this.allocationService = allocationService;
     }
 
-    @PostMapping
-    public ResourceAllocation save(@RequestBody ResourceAllocation allocation) {
-        return service.save(allocation);
+    @PostMapping("/auto/{requestId}")
+    public ResourceAllocation autoAllocate(@PathVariable Long requestId) {
+        return allocationService.autoAllocate(requestId);
     }
 
     @GetMapping
     public List<ResourceAllocation> getAll() {
-        return service.getAll();
+        return allocationService.getAllAllocations();
     }
 }

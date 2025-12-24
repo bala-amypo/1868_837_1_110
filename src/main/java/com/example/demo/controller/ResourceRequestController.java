@@ -10,19 +10,28 @@ import java.util.List;
 @RequestMapping("/api/requests")
 public class ResourceRequestController {
 
-    private final ResourceRequestService service;
+    private final ResourceRequestService requestService;
 
-    public ResourceRequestController(ResourceRequestService service) {
-        this.service = service;
+    public ResourceRequestController(ResourceRequestService requestService) {
+        this.requestService = requestService;
     }
 
-    @PostMapping
-    public ResourceRequest save(@RequestBody ResourceRequest req) {
-        return service.save(req);
+    @PostMapping("/{userId}")
+    public ResourceRequest createRequest(
+            @PathVariable Long userId,
+            @RequestBody ResourceRequest request) {
+        return requestService.createRequest(userId, request);
     }
 
-    @GetMapping
-    public List<ResourceRequest> getAll() {
-        return service.getAll();
+    @GetMapping("/user/{userId}")
+    public List<ResourceRequest> getByUser(@PathVariable Long userId) {
+        return requestService.getRequestsByUser(userId);
+    }
+
+    @PutMapping("/status/{requestId}")
+    public ResourceRequest updateStatus(
+            @PathVariable Long requestId,
+            @RequestParam String status) {
+        return requestService.updateRequestStatus(requestId, status);
     }
 }

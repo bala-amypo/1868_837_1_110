@@ -12,28 +12,33 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final UserRepository repo;
-    private final JwtUtil jwtUtil = new JwtUtil(
-            "test-secret-key-that-is-long-enough-1234", 3600000);
+    private final UserRepository userRepository;
+    private final JwtUtil jwtUtil =
+            new JwtUtil("test-secret-key-that-is-long-enough-1234", 3600000);
 
-    public AuthController(UserRepository repo) {
-        this.repo = repo;
+    public AuthController(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/login")
-    public AuthResponse login(@RequestBody AuthRequest req) {
-        User user = repo.findByEmail(req.getEmail())
+    public AuthResponse login(@RequestBody AuthRequest request) {
+
+        User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Invalid credentials"));
 
-        if (!new BCryptPasswordEncoder()
-                .matches(req.getPassword(), user.getPassword())) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        if (!encoder.matches(request.getPassword(), user.getPassword())) {
             throw new RuntimeException("Invalid credentials");
         }
 
         String token = jwtUtil.generateToken(
                 user.getId(), user.getEmail(), user.getRole());
 
-        return new AuthResponse(token, user.getId(),
-                user.getEmail(), user.getRole());
+        return new AuthResponse(
+                token,
+                user.getId(),
+                user.getEmail(),
+                user.getRole()
+        );
     }
 }
