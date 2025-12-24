@@ -16,45 +16,40 @@ public class ResourceAllocation {
     @OneToOne
     private ResourceRequest request;
 
-    private LocalDateTime allocatedAt;
+    // ✅ FIX: initialize immediately
+    private LocalDateTime allocatedAt = LocalDateTime.now();
+
     private Boolean conflictFlag = false;
     private String notes;
 
+    // Safety for JPA save
     @PrePersist
     public void prePersist() {
-        allocatedAt = LocalDateTime.now();
+        if (allocatedAt == null) {
+            allocatedAt = LocalDateTime.now();
+        }
     }
 
-    // ===== EXISTING GETTERS & SETTERS =====
-    public Resource getResource() { 
-        return resource; 
+    // ---- getters & setters ----
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public Resource getResource() { return resource; }
+    public void setResource(Resource resource) { this.resource = resource; }
+
+    public ResourceRequest getRequest() { return request; }
+    public void setRequest(ResourceRequest request) { this.request = request; }
+
+    public LocalDateTime getAllocatedAt() { return allocatedAt; }
+    public void setAllocatedAt(LocalDateTime allocatedAt) {
+        this.allocatedAt = allocatedAt;
     }
 
-    public void setResource(Resource resource) { 
-        this.resource = resource; 
+    public Boolean getConflictFlag() { return conflictFlag; }
+    public void setConflictFlag(Boolean conflictFlag) {
+        this.conflictFlag = conflictFlag;
     }
 
-    public ResourceRequest getRequest() { 
-        return request; 
-    }
-
-    public void setRequest(ResourceRequest request) { 
-        this.request = request; 
-    }
-
-    public LocalDateTime getAllocatedAt() { 
-        return allocatedAt; 
-    }
-
-    public String getNotes() { 
-        return notes; 
-    }
-
-    public void setNotes(String notes) { 
-        this.notes = notes; 
-    }
-
-    public LocalDateTime getAllocationTimestamp() {
-        return allocatedAt;
-    }
+    public String getNotes() { return notes; }
+    public void setNotes(String notes) { this.notes = notes; }
 }
