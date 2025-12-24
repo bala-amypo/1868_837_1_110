@@ -1,20 +1,14 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import java.time.LocalDateTime;
 
-import java.util.List;
-
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
     private String fullName;
@@ -24,8 +18,18 @@ public class User {
 
     private String password;
 
-    private String role;
+    private String role = "USER";
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
-    private List<Farm> farms;
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    public User() {}
+
+    public User(String fullName, String email, String password, String role) {
+        this.fullName = fullName;
+        this.email = email;
+        this.password = password;
+        this.role = role != null ? role : "USER";
+    }
+
+    // getters & setters
 }
