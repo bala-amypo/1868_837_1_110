@@ -1,34 +1,49 @@
+package com.example.demo.service.impl;
+
+import com.example.demo.entity.ResourceRequest;
+import com.example.demo.entity.User;
+import com.example.demo.repository.ResourceRequestRepository;
+import com.example.demo.repository.UserRepository;
+import com.example.demo.service.ResourceRequestService;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 @Service
 public class ResourceRequestServiceImpl implements ResourceRequestService {
 
     private final ResourceRequestRepository reqRepo;
     private final UserRepository userRepo;
 
-    public ResourceRequestServiceImpl(ResourceRequestRepository r, UserRepository u) {
-        this.reqRepo = r;
-        this.userRepo = u;
+    public ResourceRequestServiceImpl(ResourceRequestRepository reqRepo,
+                                      UserRepository userRepo) {
+        this.reqRepo = reqRepo;
+        this.userRepo = userRepo;
     }
 
-    public ResourceRequest createRequest(Long userId, ResourceRequest req) {
-        User u = userRepo.findById(userId)
+    @Override
+    public ResourceRequest createRequest(Long userId, ResourceRequest request) {
+        User user = userRepo.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (req.getStartTime().isAfter(req.getEndTime()))
-            throw new IllegalArgumentException("Invalid time");
+        if (request.getStartTime().isAfter(request.getEndTime()))
+            throw new IllegalArgumentException("Invalid time range");
 
-        req.setRequestedBy(u);
-        req.setStatus("PENDING");
-        return reqRepo.save(req);
+        request.setRequestedBy(user);
+        request.setStatus("PENDING");
+        return reqRepo.save(request);
     }
 
-    public List<ResourceRequest> getRequestsByUser(Long id) {
-        return reqRepo.findByRequestedBy_Id(id);
+    @Override
+    public List<ResourceRequest> getRequestsByUser(Long userId) {
+        return reqRepo.findByRequestedBy_Id(userId);
     }
 
-    public ResourceRequest updateRequestStatus(Long id, String status) {
-        ResourceRequest r = reqRepo.findById(id)
+    @Override
+    public ResourceRequest updateRequestStatus(Long requestId, String status) {
+        ResourceRequest req = reqRepo.findById(requestId)
                 .orElseThrow(() -> new RuntimeException("Request not found"));
-        r.setStatus(status);
-        return reqRepo.save(r);
+        req.setStatus(status);
+        return reqRepo.save(req);
     }
 }
