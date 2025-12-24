@@ -21,14 +21,9 @@
 
     <properties>
         <java.version>17</java.version>
+        <maven.test.skip>false</maven.test.skip>
+        <junit.platform.enabled>false</junit.platform.enabled>
     </properties>
-
-    <properties>
-    <java.version>17</java.version>
-    <maven.test.skip>false</maven.test.skip>
-    <junit.platform.enabled>false</junit.platform.enabled>
-</properties>
-
 
     <dependencies>
 
@@ -123,15 +118,17 @@
                 <version>3.2.5</version>
 
                 <configuration>
-                    <testNGArtifactName>org.testng:testng</testNGArtifactName>
+    <!-- Force TestNG -->
+    <providers>
+        <provider>
+            <name>testng</name>
+        </provider>
+    </providers>
 
-                    <!-- THIS IS THE KEY FIX -->
-                    <providers>
-                        <provider>
-                            <name>testng</name>
-                        </provider>
-                    </providers>
-                </configuration>
+    <!-- Required for Java 17 + Spring Boot 3 -->
+    <useModulePath>false</useModulePath>
+</configuration>
+
 
                 <dependencies>
 
