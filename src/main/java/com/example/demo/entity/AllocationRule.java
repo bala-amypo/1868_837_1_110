@@ -4,20 +4,8 @@ import jakarta.persistence.*;
 
 @Entity
 public class AllocationRule {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
-
     private String ruleName;
-    private String ruleDescription;
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getRuleName() { return ruleName; }
-    public void setRuleName(String ruleName) { this.ruleName = ruleName; }
-
-    public String getRuleDescription() { return ruleDescription; }
-    public void setRuleDescription(String ruleDescription) { this.ruleDescription = ruleDescription; }
 }
