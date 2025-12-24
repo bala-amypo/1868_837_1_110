@@ -1,15 +1,8 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "resources")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class Resource {
 
     @Id
@@ -18,8 +11,17 @@ public class Resource {
 
     private String resourceName;
     private String resourceType;
-    private Integer capacity;
-    private String location;
+    private int quantity;
 
-    private LocalDateTime createdAt;
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getResourceName() { return resourceName; }
+    public void setResourceName(String resourceName) { this.resourceName = resourceName; }
+
+    public String getResourceType() { return resourceType; }
+    public void setResourceType(String resourceType) { this.resourceType = resourceType; }
+
+    public int getQuantity() { return quantity; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
 }
