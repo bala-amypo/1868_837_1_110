@@ -6,6 +6,4 @@ import java.util.List;
 public interface ResourceRequestService {
     ResourceRequest save(ResourceRequest request);
     List<ResourceRequest> getAll();
-    ResourceRequest getById(Long id);
-    void delete(Long id);
 }
