@@ -7,44 +7,30 @@ import java.time.LocalDateTime;
 public class ResourceAllocation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
     @ManyToOne
     private Resource resource;
 
-    @ManyToOne
+    @OneToOne
     private ResourceRequest request;
 
-    // ✅ REQUIRED FOR t38_allocationTimestamp
-    private LocalDateTime allocationTimestamp;
+    private LocalDateTime allocatedAt;
+    private Boolean conflictFlag = false;
+    private String notes;
 
     @PrePersist
-    public void onCreate() {
-        this.allocationTimestamp = LocalDateTime.now();
+    public void prePersist() {
+        allocatedAt = LocalDateTime.now();
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Resource getResource() {
-        return resource;
-    }
-
-    public void setResource(Resource resource) {
-        this.resource = resource;
-    }
-
-    public ResourceRequest getRequest() {
-        return request;
-    }
-
-    public void setRequest(ResourceRequest request) {
-        this.request = request;
-    }
-
-    public LocalDateTime getAllocationTimestamp() {
-        return allocationTimestamp;
-    }
+    // getters & setters
+    public Resource getResource() { return resource; }
+    public void setResource(Resource resource) { this.resource = resource; }
+    public ResourceRequest getRequest() { return request; }
+    public void setRequest(ResourceRequest request) { this.request = request; }
+    public LocalDateTime getAllocatedAt() { return allocatedAt; }
+    public String getNotes() { return notes; }
+    public void setNotes(String notes) { this.notes = notes; }
 }
